@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -37,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
 
         button = findViewById(R.id.button);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout,new HomeFragment())
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frameLayout,new HomeFragment())
                 .commit();
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -46,4 +48,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed(){
+        FragmentManager fm = getFragmentManager();
+        if (fm.getBackStackEntryCount() > 0) {
+            Log.i("MainActivity", "popping backstack");
+            fm.popBackStack();
+        } else {
+            Log.i("MainActivity", "nothing on backstack, calling super");
+            super.onBackPressed();
+        }
+    }
+
 }

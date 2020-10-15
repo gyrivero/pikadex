@@ -52,7 +52,11 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.PokemonV
                 Bundle bundle = new Bundle();
                 bundle.putInt("idPokemon",pokemon.getId());
                 fragment.setArguments(bundle);
-                ((MainActivity)mContext).getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout,fragment).commit();
+                ((MainActivity)mContext).getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.frameLayout,fragment)
+                        .addToBackStack(null)
+                        .commit();
             }
         });
     }

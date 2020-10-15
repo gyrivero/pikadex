@@ -17,12 +17,15 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.cloudfoxgames.pikadex.R;
+import com.cloudfoxgames.pikadex.common.Utils;
+import com.cloudfoxgames.pikadex.data.model.Type;
 import com.cloudfoxgames.pikadex.data.viewmodel.PokemonViewModel;
 import com.cloudfoxgames.pikadex.databinding.FragmentHomeBinding;
 import com.cloudfoxgames.pikadex.retrofit.model.DetailedPokemon;
 import com.cloudfoxgames.pikadex.retrofit.model.Pokemon;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -32,8 +35,8 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
     private PokemonViewModel viewModel;
     private PokemonAdapter adapter;
+    private Utils utils;
     private ArrayList<Pokemon> pokemonList;
-    private ArrayList<DetailedPokemon> detailedPokemons;
 
     @Nullable
     @Override
@@ -51,6 +54,9 @@ public class HomeFragment extends Fragment {
         initRecyclerView();
         observeData();
         viewModel.getPokemons();
+        utils = new Utils(getActivity());
+        List<Type> listTypes = utils.jsonParse("types.json");
+        Toast.makeText(getActivity(), listTypes.get(0).name, Toast.LENGTH_SHORT).show();
     }
 
 

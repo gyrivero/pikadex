@@ -27,7 +27,6 @@ public class PokemonFragment extends Fragment {
     int idPokemon;
     private PokemonViewModel viewModel;
     private FragmentPokemonBinding binding;
-    TextView pokemonTV;
 
     public PokemonFragment() {
         // Required empty public constructor
@@ -88,9 +87,41 @@ public class PokemonFragment extends Fragment {
     private Drawable getBackgroundByType(String type) {
         if (type.equals("Bug")) {
             return getResources().getDrawable(R.drawable.amie_bug_wallpaper,null);
+        } else if (type.equals("Fire")) {
+            return getResources().getDrawable(R.drawable.amie_fire_wallpaper,null);
+        } else if (type.equals("Fairy")) {
+            return getResources().getDrawable(R.drawable.amie_fairy_wallpaper,null);
+        } else if (type.equals("Dark")) {
+            return getResources().getDrawable(R.drawable.amie_dark_wallpaper,null);
+        } else if (type.equals("Ground")) {
+            return getResources().getDrawable(R.drawable.amie_ground_wallpaper,null);
+        } else if (type.equals("Grass")) {
+            return getResources().getDrawable(R.drawable.amie_grass_wallpaper,null);
+        } else if (type.equals("Dragon")) {
+            return getResources().getDrawable(R.drawable.amie_dragon_wallpaper,null);
+        } else if (type.equals("Electric")) {
+            return getResources().getDrawable(R.drawable.amie_electric_wallpaper,null);
+        } else if (type.equals("Fighting")) {
+            return getResources().getDrawable(R.drawable.amie_fighting_wallpaper,null);
+        } else if (type.equals("Flying")) {
+            return getResources().getDrawable(R.drawable.amie_flying_wallpaper,null);
+        } else if (type.equals("Ghost")) {
+            return getResources().getDrawable(R.drawable.amie_ghost_wallpaper,null);
+        } else if (type.equals("Ice")) {
+            return getResources().getDrawable(R.drawable.amie_ice_wallpaper,null);
+        } else if (type.equals("Normal")) {
+            return getResources().getDrawable(R.drawable.amie_normal_wallpaper,null);
+        } else if (type.equals("Poison")) {
+            return getResources().getDrawable(R.drawable.amie_poison_wallpaper,null);
+        } else if (type.equals("Psychic")) {
+            return getResources().getDrawable(R.drawable.amie_psychic_wallpaper,null);
+        } else if (type.equals("Rock")) {
+            return getResources().getDrawable(R.drawable.amie_rock_wallpaper,null);
+        } else if (type.equals("Steel")) {
+            return getResources().getDrawable(R.drawable.amie_steel_wallpaper,null);
+        } else if (type.equals("Water")) {
+            return getResources().getDrawable(R.drawable.amie_water_wallpaper,null);
         }
         return getResources().getDrawable(R.drawable.amie_normal_wallpaper,null);
     }
-
-
 }
