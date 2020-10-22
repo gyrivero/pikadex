@@ -17,7 +17,6 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
-    Button button;
     PokemonViewModel viewModel;
 
     @Override
@@ -26,17 +25,9 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        button = findViewById(R.id.button);
-
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.frameLayout,new HomeFragment())
                 .commit();
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
     }
 
     @Override

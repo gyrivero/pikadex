@@ -1,5 +1,6 @@
 package com.cloudfoxgames.pikadex.ui;
 
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
@@ -12,9 +13,12 @@ import androidx.lifecycle.ViewModelProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.MultiTransformation;
+import com.bumptech.glide.request.RequestOptions;
 import com.cloudfoxgames.pikadex.R;
 import com.cloudfoxgames.pikadex.common.Utils;
 import com.cloudfoxgames.pikadex.data.model.Pokemon;
@@ -23,17 +27,21 @@ import com.cloudfoxgames.pikadex.data.viewmodel.PokemonViewModel;
 import com.cloudfoxgames.pikadex.databinding.FragmentPokemonBinding;
 import com.cloudfoxgames.pikadex.retrofit.model.DetailedPokemon;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class PokemonFragment extends Fragment {
-    int idPokemon;
-    Pokemon pokemon;
-    Utils utils;
-    List<Type> listTypes;
+    private int idPokemon;
+    private Pokemon pokemon;
+    private Utils utils;
+    private List<Type> listTypes;
+    private ArrayList<String> weaksList;
+    private ArrayList<String> resistancesList;
     private PokemonViewModel viewModel;
+    private EffectAdapter effectAdapter;
     private FragmentPokemonBinding binding;
 
     public PokemonFragment() {
@@ -72,16 +80,18 @@ public class PokemonFragment extends Fragment {
 
     private void setViews() {
         setPokemonName();
-        setPokemonImage();
         setPokemonType();
+        setPokemonImage();
         setPokemonWeaks();
+        setPokemonResistances();
     }
 
     private void setPokemonImage() {
         Glide.with(getActivity())
                 .load("https://img.pokemondb.net/sprites/home/normal/"+pokemon.getName()+".png")
                 .into(binding.pokemonIV);
-        binding.pokemonCV.setBackground(getBackgroundByType(listTypes.get(pokemon.getType1()).getName()));
+        binding.pokemonCL.setBackground(getBackgroundByType(pokemon.getPrimaryType().getName()));
+        binding.pokemonRCV.setCardBackgroundColor(getResources().getColor(R.color.colorAccent));
     }
 
     private void setPokemonName() {
@@ -90,27 +100,51 @@ public class PokemonFragment extends Fragment {
         binding.pokemonNameTV.setText(name);
     }
 
-
-    private void setPokemonWeaks() {
-        String weaks = "Weaks:";
+    private void setPokemonResistances() {
+        resistancesList = new ArrayList<>();
         if (pokemon.getSecondaryType() != null) {
             for (int i = 0; i < listTypes.size(); i++) {
                 float effect;
                 effect = pokemon.getPrimaryType().getEffectiveness().get(i) * pokemon.getSecondaryType().getEffectiveness().get(i);
-                if (effect>1.0f) {
-                    weaks += " " + listTypes.get(i).getName() + " x" + effect;
+                if (effect<1.0f) {
+                    resistancesList.add(listTypes.get(i).getName() + " x" + effect);
                 }
             }
         } else {
             for (int i = 0; i < listTypes.size(); i++) {
                 float effect;
                 effect = pokemon.getPrimaryType().getEffectiveness().get(i);
-                if (effect > 1) {
-                    weaks += " " + listTypes.get(i).getName() + " x" + effect;
+                if (effect < 1.0f) {
+                    resistancesList.add(listTypes.get(i).getName() + " x" + effect);
                 }
             }
         }
-        binding.weaksTV.setText(weaks);
+        effectAdapter = new EffectAdapter(getContext(),resistancesList);
+        binding.resistancesLV.setAdapter(effectAdapter);
+    }
+
+
+    private void setPokemonWeaks() {
+        weaksList = new ArrayList<>();
+        if (pokemon.getSecondaryType() != null) {
+            for (int i = 0; i < listTypes.size(); i++) {
+                float effect;
+                effect = pokemon.getPrimaryType().getEffectiveness().get(i) * pokemon.getSecondaryType().getEffectiveness().get(i);
+                if (effect>1.0f) {
+                    weaksList.add(listTypes.get(i).getName() + " x" + effect);
+                }
+            }
+        } else {
+            for (int i = 0; i < listTypes.size(); i++) {
+                float effect;
+                effect = pokemon.getPrimaryType().getEffectiveness().get(i);
+                if (effect > 1.0f) {
+                    weaksList.add(listTypes.get(i).getName() + " x" + effect);
+                }
+            }
+        }
+        effectAdapter = new EffectAdapter(getContext(),weaksList);
+        binding.weaksLV.setAdapter(effectAdapter);
     }
 
     private void setPokemonType() {
