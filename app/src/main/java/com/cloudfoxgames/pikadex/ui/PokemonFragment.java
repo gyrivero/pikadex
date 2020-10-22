@@ -16,15 +16,23 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.cloudfoxgames.pikadex.R;
+import com.cloudfoxgames.pikadex.common.Utils;
+import com.cloudfoxgames.pikadex.data.model.Pokemon;
+import com.cloudfoxgames.pikadex.data.model.Type;
 import com.cloudfoxgames.pikadex.data.viewmodel.PokemonViewModel;
 import com.cloudfoxgames.pikadex.databinding.FragmentPokemonBinding;
 import com.cloudfoxgames.pikadex.retrofit.model.DetailedPokemon;
+
+import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class PokemonFragment extends Fragment {
     int idPokemon;
+    Pokemon pokemon;
+    Utils utils;
+    List<Type> listTypes;
     private PokemonViewModel viewModel;
     private FragmentPokemonBinding binding;
 
@@ -37,6 +45,7 @@ public class PokemonFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             idPokemon = getArguments().getInt("idPokemon");
+            pokemon = (Pokemon) getArguments().getSerializable("Pokemon");
         }
 
     }
@@ -46,6 +55,8 @@ public class PokemonFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentPokemonBinding.inflate(inflater, container, false);
+        utils = new Utils(getActivity());
+        listTypes = utils.jsonTypesParse("types.json");
         return binding.getRoot();
     }
 
@@ -54,8 +65,64 @@ public class PokemonFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(this).get(PokemonViewModel.class);
 
-        observerData();
-        viewModel.getPokemon(idPokemon);
+        setViews();
+        //observerData();
+        //viewModel.getPokemon(idPokemon);
+    }
+
+    private void setViews() {
+        setPokemonName();
+        setPokemonImage();
+        setPokemonType();
+        setPokemonWeaks();
+    }
+
+    private void setPokemonImage() {
+        Glide.with(getActivity())
+                .load("https://img.pokemondb.net/sprites/home/normal/"+pokemon.getName()+".png")
+                .into(binding.pokemonIV);
+        binding.pokemonCV.setBackground(getBackgroundByType(listTypes.get(pokemon.getType1()).getName()));
+    }
+
+    private void setPokemonName() {
+        String name = pokemon.getName();
+        name = name.substring(0, 1).toUpperCase() + name.substring(1);
+        binding.pokemonNameTV.setText(name);
+    }
+
+
+    private void setPokemonWeaks() {
+        String weaks = "Weaks:";
+        if (pokemon.getSecondaryType() != null) {
+            for (int i = 0; i < listTypes.size(); i++) {
+                float effect;
+                effect = pokemon.getPrimaryType().getEffectiveness().get(i) * pokemon.getSecondaryType().getEffectiveness().get(i);
+                if (effect>1.0f) {
+                    weaks += " " + listTypes.get(i).getName() + " x" + effect;
+                }
+            }
+        } else {
+            for (int i = 0; i < listTypes.size(); i++) {
+                float effect;
+                effect = pokemon.getPrimaryType().getEffectiveness().get(i);
+                if (effect > 1) {
+                    weaks += " " + listTypes.get(i).getName() + " x" + effect;
+                }
+            }
+        }
+        binding.weaksTV.setText(weaks);
+    }
+
+    private void setPokemonType() {
+        pokemon.setPrimaryType(listTypes.get(pokemon.getType1()));
+        String type = pokemon.getPrimaryType().getName();
+        if (pokemon.getType2() >= 0) {
+            pokemon.setSecondaryType(listTypes.get(pokemon.getType2()));
+            type += " " + pokemon.getSecondaryType().getName();
+        } else {
+            pokemon.setSecondaryType(null);
+        }
+        binding.typeTV.setText(type);
     }
 
     private void observerData() {

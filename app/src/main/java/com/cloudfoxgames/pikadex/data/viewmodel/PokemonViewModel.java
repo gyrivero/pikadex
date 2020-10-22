@@ -1,30 +1,24 @@
 package com.cloudfoxgames.pikadex.data.viewmodel;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.hilt.lifecycle.ViewModelInject;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.cloudfoxgames.pikadex.common.MyApp;
 import com.cloudfoxgames.pikadex.data.repository.PokemonRepository;
 import com.cloudfoxgames.pikadex.retrofit.model.DetailedPokemon;
-import com.cloudfoxgames.pikadex.retrofit.model.Pokemon;
-import com.cloudfoxgames.pikadex.retrofit.model.PokemonResponse;
 
 import java.util.ArrayList;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Scheduler;
-import io.reactivex.rxjava3.functions.Function;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class PokemonViewModel extends ViewModel {
     private static final String TAG = "PokemonViewModel";
 
     private PokemonRepository pokemonRepository;
-    private MutableLiveData<ArrayList<Pokemon>> pokemonList = new MutableLiveData<>();
+    //private MutableLiveData<ArrayList<Pokemon>> pokemonList = new MutableLiveData<>();
     private MutableLiveData<DetailedPokemon> detailedPokemon = new MutableLiveData<>();
 
     @ViewModelInject
@@ -32,9 +26,9 @@ public class PokemonViewModel extends ViewModel {
         this.pokemonRepository = pokemonRepository;
     }
 
-    public MutableLiveData<ArrayList<Pokemon>> getPokemonList() {
+    /*public MutableLiveData<ArrayList<Pokemon>> getPokemonList() {
         return pokemonList;
-    }
+    }*/
 
     public MutableLiveData<DetailedPokemon> getDetailedPokemon() {
         return detailedPokemon;
@@ -48,7 +42,7 @@ public class PokemonViewModel extends ViewModel {
                             error -> Log.e(TAG,"getPokemon:" + id + error.getMessage()));
     }
 
-    public void getPokemons() {
+    /*public void getPokemons() {
         pokemonRepository.getPokemons()
                 .subscribeOn(Schedulers.io())
                 .map(new Function<PokemonResponse, ArrayList<Pokemon>>() {
@@ -68,5 +62,5 @@ public class PokemonViewModel extends ViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> pokemonList.setValue(result),
                         error -> Log.e(TAG,"getPokemons: "+ error.getMessage()));
-    }
+    }*/
 }

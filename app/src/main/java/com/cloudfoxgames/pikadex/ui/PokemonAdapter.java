@@ -1,6 +1,5 @@
 package com.cloudfoxgames.pikadex.ui;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,14 +8,12 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.cloudfoxgames.pikadex.R;
+import com.cloudfoxgames.pikadex.data.model.Pokemon;
 import com.cloudfoxgames.pikadex.databinding.ListItemBinding;
-import com.cloudfoxgames.pikadex.retrofit.model.DetailedPokemon;
-import com.cloudfoxgames.pikadex.retrofit.model.Pokemon;
 
 import java.util.ArrayList;
 
@@ -50,6 +47,7 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.PokemonV
                 pokemon = mList.get(position);
                 Fragment fragment = new PokemonFragment();
                 Bundle bundle = new Bundle();
+                bundle.putSerializable("Pokemon",pokemon);
                 bundle.putInt("idPokemon",pokemon.getId());
                 fragment.setArguments(bundle);
                 ((MainActivity)mContext).getSupportFragmentManager()

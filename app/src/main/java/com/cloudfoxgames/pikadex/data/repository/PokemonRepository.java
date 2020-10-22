@@ -2,7 +2,6 @@ package com.cloudfoxgames.pikadex.data.repository;
 
 import com.cloudfoxgames.pikadex.retrofit.PokeApiService;
 import com.cloudfoxgames.pikadex.retrofit.model.DetailedPokemon;
-import com.cloudfoxgames.pikadex.retrofit.model.PokemonResponse;
 
 import javax.inject.Inject;
 
@@ -16,9 +15,9 @@ public class PokemonRepository {
         this.pokeApiService = pokeApiService;
     }
 
-    public Observable<PokemonResponse> getPokemons() {
+    /*public Observable<PokemonResponse> getPokemons() {
         return pokeApiService.getPokemons();
-    }
+    }*/
 
     public Observable<DetailedPokemon> getPokemon(int id) {return pokeApiService.getPokemon(id);}
 }

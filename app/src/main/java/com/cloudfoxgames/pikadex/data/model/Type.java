@@ -3,7 +3,19 @@ package com.cloudfoxgames.pikadex.data.model;
 import java.util.ArrayList;
 
 public class Type {
-    public int id;
-    public String name;
-    public ArrayList<Float> effectiveness;
+    private int id;
+    private String name;
+    private ArrayList<Float> effectiveness;
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public ArrayList<Float> getEffectiveness() {
+        return effectiveness;
+    }
 }

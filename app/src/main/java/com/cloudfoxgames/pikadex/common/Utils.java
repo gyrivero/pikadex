@@ -2,12 +2,16 @@ package com.cloudfoxgames.pikadex.common;
 
 import android.content.Context;
 
+import com.cloudfoxgames.pikadex.data.model.Pokemon;
 import com.cloudfoxgames.pikadex.data.model.Type;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -22,7 +26,7 @@ public class Utils {
         this.context = context;
     }
 
-    private String getJsonDataFromAsset(String fileName) {
+    public String getJsonDataFromAsset(String fileName) {
         String json = null;
         try {
             InputStream is = context.getApplicationContext().getAssets().open(fileName);
@@ -38,7 +42,15 @@ public class Utils {
         return json;
     }
 
-    public List<Type> jsonParse(String filename) {
+    public ArrayList<Pokemon> jsonPokemonsParse(String filename) {
+        Gson gson = new Gson();
+        String fileJson = getJsonDataFromAsset(filename);
+        java.lang.reflect.Type typeListOfPokemons = new TypeToken<List<Pokemon>>(){}.getType();
+        ArrayList<Pokemon> listOfPokemons = gson.fromJson(fileJson, typeListOfPokemons);
+        return listOfPokemons;
+    }
+
+    public List<Type> jsonTypesParse(String filename) {
         Gson gson = new Gson();
         String fileJson = getJsonDataFromAsset(filename);
         java.lang.reflect.Type typeListOfTypes = new TypeToken<List<Type>>(){}.getType();
